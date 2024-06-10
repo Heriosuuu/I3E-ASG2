@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
 {
     Collectible collectible;
     Giftbox giftbox;
+    Keypad keypad;
 
     [SerializeField]
     Transform playerCamera;
@@ -38,6 +39,12 @@ public class Player : MonoBehaviour
             giftbox.Interact();
             giftbox = null;
         }
+
+        if (keypad != null)
+        {
+            keypad.Interact();
+            keypad = null;
+        }
     }
 
     public void Update()
@@ -64,10 +71,22 @@ public class Player : MonoBehaviour
                     OnInteract();
                 }
             }
+
+            else if (hitInfo.transform.TryGetComponent<Keypad>(out keypad))
+            {
+                // Interact text
+                interactText.gameObject.SetActive(true);
+                if (Input.GetKeyDown(interactKey))
+                {
+                    OnInteract();
+                }
+            }
+
             else
             {
                 collectible = null;
                 giftbox = null;
+                keypad = null;
                 interactText.gameObject.SetActive(false);
             }
         }
@@ -75,6 +94,7 @@ public class Player : MonoBehaviour
         {
             collectible = null;
             giftbox = null;
+            keypad = null;
             interactText.gameObject.SetActive(false);
         }
     }
