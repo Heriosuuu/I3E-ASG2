@@ -5,18 +5,28 @@ using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
-
+    
     private float health;
     private float lerpTimer;
+
+    [Header("Health Bar")]
     public float maxHealth = 100f;
     public float chipSpeed = 2f;
     public Image frontHp;
     public Image backHp;
 
+    [Header("Damage")]
+    public Image overlay;
+    public float duration;
+    public float fadeSpd;
+
+    private float durationTimer;
+
     // Start is called before the first frame update
     void Start()
     {
         health = maxHealth;
+        overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 0f);
     }
 
     // Update is called once per frame
@@ -24,7 +34,6 @@ public class PlayerHealth : MonoBehaviour
     {
         health = Mathf.Clamp(health, 0, maxHealth);
         UpdateHealthUI();
-
 
         if (Input.GetKeyUp(KeyCode.L))
         {
@@ -35,6 +44,23 @@ public class PlayerHealth : MonoBehaviour
         {
             RestoreHealth(10);
         }
+
+        if (overlay.color.a > 0)
+        {
+            if (health < 30)
+            {
+                return;
+            }
+
+            durationTimer += Time.deltaTime;
+            if(durationTimer > duration)
+            {
+                float tempAlpha = overlay.color.a;
+                tempAlpha -= Time.deltaTime * fadeSpd;
+                overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, tempAlpha);
+            }
+        }
+   
     }
 
     public void UpdateHealthUI()
@@ -70,6 +96,7 @@ public class PlayerHealth : MonoBehaviour
     {
         health -= damage;
         lerpTimer = 0f;
+        overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 1);
     }
 
     public void RestoreHealth(float healAmount)
