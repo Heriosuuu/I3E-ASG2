@@ -7,7 +7,7 @@ public class Collectible : MonoBehaviour
     [SerializeField]
     private AudioClip collectAudio;
 
-    public int ammo = 30;
+    public int ammo = 15;
     public void UpdatePlayerInteractable(Player player)
     {
         player.UpdateCollectible(this);

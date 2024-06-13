@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    private int ammo = 0;
+    public int ammo = 15;
 
     public TextMeshProUGUI scoreText;
 
@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
     public void AddPoint(int ammoCount)
     {
         ammo += ammoCount;
-        Debug.Log("Ammo: " + ammo + "/30");
-        scoreText.text = "Ammo: " + ammo.ToString() + "/30";
+        Debug.Log("Ammo: " + ammo + "/15");
+        scoreText.text = "Ammo: " + ammo.ToString() + "/15";
     }
 }
