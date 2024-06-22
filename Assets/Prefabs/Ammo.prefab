@@ -120,5 +120,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64a6b51048940924cbb67886c88744db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interactionText: '[E] Pick up Ammo'
   collectAudio: {fileID: 8300000, guid: 3269a2d154970e64a94ca4122696c9bc, type: 3}
-  points: 10
+  ammo: 15

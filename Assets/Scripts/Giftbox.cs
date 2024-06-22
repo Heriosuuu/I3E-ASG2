@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Giftbox : MonoBehaviour
+public class Giftbox : Interactable
 {
     [SerializeField]
     private AudioClip collectAudio;

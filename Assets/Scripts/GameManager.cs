@@ -11,6 +11,9 @@ public class GameManager : MonoBehaviour
 
     public TextMeshProUGUI scoreText;
 
+    public bool haveEnergy = false; // Boolean to check if the player has the energy pod
+    public GameObject inventoryEnergyPod; // Reference to the inventory UI element for the energy pod
+
     private void Awake()
     {
         if (Instance == null)
@@ -27,7 +30,19 @@ public class GameManager : MonoBehaviour
     public void AddPoint(int ammoCount)
     {
         ammo += ammoCount;
-        Debug.Log("Ammo: " + ammo + "/15");
-        scoreText.text = "Ammo: " + ammo.ToString() + "/15";
+        Debug.Log("Ammo: " + ammo );
+        scoreText.text = "Ammo: " + ammo.ToString();
+    }
+
+    public void EnableEnergyPodUI()
+    {
+        inventoryEnergyPod.SetActive(true); // Enable the inventory energy pod UI element
+    }
+
+    public void GameWin()
+    {
+        
+        Debug.Log("Game Won!");
+        
     }
 }

@@ -97,7 +97,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3d39b78af512a94b9de0a6ba5a894df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  door: {fileID: 0}
+  interactionText: '[E] Enter Key Number'
+  door: {fileID: 401418898052638264, guid: de0500c38c332e845b336e564801f73c, type: 3}
 --- !u!65 &1637499902241444851
 BoxCollider:
   m_ObjectHideFlags: 0
