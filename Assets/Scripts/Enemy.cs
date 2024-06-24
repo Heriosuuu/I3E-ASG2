@@ -8,7 +8,7 @@ public class Enemy : MonoBehaviour
     public NavMeshAgent agent;
     public Transform player;
     public LayerMask whatIsGround, whatIsPlayer;
-    public float health = 60f;  
+    public float health;
 
     // Patroling
     public Vector3 walkPoint;
@@ -123,16 +123,18 @@ public class Enemy : MonoBehaviour
         alreadyAttacked = false;
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         health -= damage;
-        if (health <= 0)
+        
+        if (health < 1)
         {
             DestroyEnemy();
         }
+
     }
 
-    private void DestroyEnemy()
+    public void DestroyEnemy()
     {
         Destroy(gameObject);
     }

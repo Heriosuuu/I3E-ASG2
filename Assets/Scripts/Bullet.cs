@@ -27,7 +27,6 @@ public class Bullet : MonoBehaviour
             Enemy enemy = other.GetComponent<Enemy>();
             if (enemy != null)
             {
-
                 // Reduce the enemy's health
                 enemy.TakeDamage((int)damage);
             }

@@ -35,16 +35,6 @@ public class PlayerHealth : MonoBehaviour
         health = Mathf.Clamp(health, 0, maxHealth);
         UpdateHealthUI();
 
-        if (Input.GetKeyUp(KeyCode.L))
-        {
-            TakeDamage(Random.Range(20, 30));
-        }
-
-        if (Input.GetKeyUp(KeyCode.M))
-        {
-            RestoreHealth(10);
-        }
-
         if (overlay.color.a > 0)
         {
             if (health < 30)
@@ -65,7 +55,7 @@ public class PlayerHealth : MonoBehaviour
 
     public void UpdateHealthUI()
     {
-        Debug.Log(health);
+        
         float fillF = frontHp.fillAmount;
         float fillB = backHp.fillAmount;
         float hFraction = health / maxHealth;
