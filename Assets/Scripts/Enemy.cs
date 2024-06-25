@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
@@ -9,6 +10,18 @@ public class Enemy : MonoBehaviour
     public Transform player;
     public LayerMask whatIsGround, whatIsPlayer;
     public float health;
+
+    private float lerpTimer;
+
+    [Header("Health Bar")]
+    public float maxHealth = 60f;
+    public float chipSpeed = 2f;
+    public Image frontHp;
+    public Image backHp;
+
+    [Header("Damage")]
+    public float duration;
+    public float fadeSpd;
 
     // Patroling
     public Vector3 walkPoint;
@@ -28,10 +41,14 @@ public class Enemy : MonoBehaviour
     {
         player = GameObject.Find("PlayerObj").transform;
         agent = GetComponent<NavMeshAgent>();
+        health = maxHealth;
     }
 
     private void Update()
     {
+        health = Mathf.Clamp(health, 0, maxHealth);
+        UpdateHealthUI();
+
         // Check for sight and attack range
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
@@ -47,6 +64,24 @@ public class Enemy : MonoBehaviour
         if (playerInAttackRange && playerInSightRange)
         {
             AttackPlayer();
+        }
+    }
+
+    public void UpdateHealthUI()
+    {
+
+        float fillF = frontHp.fillAmount;
+        float fillB = backHp.fillAmount;
+        float hFraction = health / maxHealth;
+
+        if (fillB > hFraction)
+        {
+            frontHp.fillAmount = hFraction;
+            backHp.color = Color.red;
+            lerpTimer += Time.deltaTime;
+            float percentComplete = lerpTimer / chipSpeed;
+            percentComplete = percentComplete * percentComplete;
+            backHp.fillAmount = Mathf.Lerp(fillB, hFraction, percentComplete);
         }
     }
 
@@ -126,7 +161,8 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(float damage)
     {
         health -= damage;
-        
+        lerpTimer = 0f;
+
         if (health < 1)
         {
             DestroyEnemy();

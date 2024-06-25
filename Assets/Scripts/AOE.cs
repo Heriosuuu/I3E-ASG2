@@ -5,9 +5,19 @@ using UnityEngine;
 public class AOEEffect : MonoBehaviour
 {
     public float damage = 5f;
-    public float duration = 0.5f;
+    public float duration = 5f;
     private float timer;
+    private Animator animator;
 
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
+
+    private void Start()
+    {
+        animator.Play("Enlarge");
+    }
     private void Update()
     {
         timer += Time.deltaTime;
@@ -19,6 +29,8 @@ public class AOEEffect : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+
+
         if (other.gameObject.name == "PlayerCapsule")
         {
             PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
@@ -29,6 +41,7 @@ public class AOEEffect : MonoBehaviour
         }
         else if (other.gameObject.name == "Enemy")
         {
+           
             Enemy enemy = other.GetComponent<Enemy>();
             if (enemy != null)
             {
