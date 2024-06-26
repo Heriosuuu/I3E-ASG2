@@ -7,6 +7,7 @@ TagManager:
   - Enemy
   - CinemachineTarget
   - Wall
+  - Blocked
   layers:
   - Default
   - TransparentFX

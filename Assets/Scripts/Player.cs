@@ -6,6 +6,7 @@ using StarterAssets;
 
 public class Player : MonoBehaviour
 {
+
     Collectible collectible;
     Giftbox giftbox;
     Keypad keypad;
@@ -27,6 +28,11 @@ public class Player : MonoBehaviour
 
     public GameObject gun; // Reference to the gun GameObject on the player
     public GameObject ammo; // Reference to the ammo GameObject on the player
+
+    private void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
 
     private void Start()
     {

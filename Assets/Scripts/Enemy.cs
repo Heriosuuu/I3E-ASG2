@@ -69,7 +69,6 @@ public class Enemy : MonoBehaviour
 
     public void UpdateHealthUI()
     {
-
         float fillF = frontHp.fillAmount;
         float fillB = backHp.fillAmount;
         float hFraction = health / maxHealth;

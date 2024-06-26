@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class AOEEffect : MonoBehaviour
 {
-    public float damage = 5f;
-    public float duration = 5f;
-    private float timer;
     private Animator animator;
+    public float destroyAfter = 1.5f;  // Time after which the GameObject will be destroyed
 
     private void Awake()
     {
@@ -17,37 +15,12 @@ public class AOEEffect : MonoBehaviour
     private void Start()
     {
         animator.Play("Enlarge");
-    }
-    private void Update()
-    {
-        timer += Time.deltaTime;
-        if (timer >= duration)
-        {
-            Destroy(gameObject);
-        }
+        StartCoroutine(DestroyAfterTime(destroyAfter));
     }
 
-    private void OnTriggerEnter(Collider other)
+    private IEnumerator DestroyAfterTime(float time)
     {
-
-
-        if (other.gameObject.name == "PlayerCapsule")
-        {
-            PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
-            if (playerHealth != null)
-            {
-                playerHealth.TakeDamage((int)damage);
-            }
-        }
-        else if (other.gameObject.name == "Enemy")
-        {
-           
-            Enemy enemy = other.GetComponent<Enemy>();
-            if (enemy != null)
-            {
-                enemy.TakeDamage((int)damage);
-            }
-        }
+        yield return new WaitForSeconds(time);
+        Destroy(gameObject);
     }
 }
-
