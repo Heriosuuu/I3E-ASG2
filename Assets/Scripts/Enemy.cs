@@ -23,19 +23,19 @@ public class Enemy : MonoBehaviour
     public float duration;
     public float fadeSpd;
 
-    // Patroling
-    public Vector3 walkPoint;
-    bool walkPointSet;
-    public float walkPointRange;
-
-    // Attacking
+    [Header("Attack")]
+    public float sightRange = 10f; // Adjust as needed
+    public float attackRange = 5f; // Adjust as needed
     public float timeBetweenAttacks = 3f;
-    bool alreadyAttacked;
-    public GameObject projectile;
+    private bool playerInSightRange, playerInAttackRange;
+    private bool alreadyAttacked;
 
-    // States
-    public float sightRange, attackRange;
-    public bool playerInSightRange, playerInAttackRange;
+    [Header("Projectile")]
+    public GameObject projectilePrefab;
+    public float projectileSpeed = 20f;
+
+    [Header("Audio")]
+    public AudioClip destructionSound; // Sound played when the enemy is destroyed
 
     private void Start()
     {
@@ -69,52 +69,28 @@ public class Enemy : MonoBehaviour
 
     public void UpdateHealthUI()
     {
-        float fillF = frontHp.fillAmount;
-        float fillB = backHp.fillAmount;
         float hFraction = health / maxHealth;
 
-        if (fillB > hFraction)
+        // Update health bar visuals
+        frontHp.fillAmount = hFraction;
+
+        // Smoothly update the back health bar
+        backHp.fillAmount = Mathf.Lerp(backHp.fillAmount, hFraction, Time.deltaTime * chipSpeed);
+
+        // Change color based on health status
+        if (health <= 0)
         {
-            frontHp.fillAmount = hFraction;
             backHp.color = Color.red;
-            lerpTimer += Time.deltaTime;
-            float percentComplete = lerpTimer / chipSpeed;
-            percentComplete = percentComplete * percentComplete;
-            backHp.fillAmount = Mathf.Lerp(fillB, hFraction, percentComplete);
+        }
+        else
+        {
+            backHp.color = Color.green;
         }
     }
 
     private void Patroling()
     {
-        if (!walkPointSet)
-        {
-            SearchWalkPoint();
-        }
-
-        if (walkPointSet)
-        {
-            agent.SetDestination(walkPoint);
-        }
-
-        Vector3 distanceToWalkPoint = transform.position - walkPoint;
-
-        // Walkpoint reached
-        if (distanceToWalkPoint.magnitude < 1f)
-            walkPointSet = false;
-    }
-
-    private void SearchWalkPoint()
-    {
-        // Calculate random point in range
-        float randomZ = Random.Range(-walkPointRange, walkPointRange);
-        float randomX = Random.Range(-walkPointRange, walkPointRange);
-
-        walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
-
-        if (Physics.Raycast(walkPoint, -transform.up, 2f, whatIsGround))
-        {
-            walkPointSet = true;
-        }
+        // Implement patrol logic here if needed
     }
 
     private void ChasePlayer()
@@ -124,9 +100,10 @@ public class Enemy : MonoBehaviour
 
     private void AttackPlayer()
     {
-        // Make sure enemy doesn't move
+        // Stop moving towards the player
         agent.SetDestination(transform.position);
 
+        // Rotate to face the player
         transform.LookAt(player);
 
         if (!alreadyAttacked)
@@ -141,13 +118,16 @@ public class Enemy : MonoBehaviour
 
     private void ShootProjectile()
     {
-        Vector3 targetPosition = player.position + Vector3.up * 2.1f; // Aim slightly above the player
-        Vector3 direction = (targetPosition - transform.position).normalized;
-        GameObject spawnedProjectile = Instantiate(projectile, transform.position, Quaternion.LookRotation(direction));
+        // Instantiate a projectile at the enemy's position
+        GameObject spawnedProjectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
+
+        // Calculate direction towards the player
+        Vector3 direction = (player.position - transform.position).normalized;
+
+        // Get the Rigidbody component and set velocity
         Rigidbody rb = spawnedProjectile.GetComponent<Rigidbody>();
         if (rb != null)
         {
-            float projectileSpeed = 20f; // Adjust speed as needed
             rb.velocity = direction * projectileSpeed;
         }
     }
@@ -162,22 +142,30 @@ public class Enemy : MonoBehaviour
         health -= damage;
         lerpTimer = 0f;
 
-        if (health < 1)
+        if (health <= 0)
         {
             DestroyEnemy();
         }
-
     }
 
     public void DestroyEnemy()
     {
+        // Play destruction sound if defined
+        if (destructionSound != null)
+        {
+            AudioSource.PlayClipAtPoint(destructionSound, transform.position, 1f);
+        }
+
+        // Destroy the enemy GameObject
         Destroy(gameObject);
     }
 
     private void OnDrawGizmosSelected()
     {
+        // Draw attack and sight ranges for debugging
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
+
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, sightRange);
     }

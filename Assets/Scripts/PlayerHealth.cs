@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
-    
     private float health;
     private float lerpTimer;
 
@@ -19,17 +18,16 @@ public class PlayerHealth : MonoBehaviour
     public Image overlay;
     public float duration;
     public float fadeSpd;
+    public AudioClip damageSound; // Sound clip for taking damage
 
     private float durationTimer;
 
-    // Start is called before the first frame update
     void Start()
     {
         health = maxHealth;
         overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 0f);
     }
 
-    // Update is called once per frame
     void Update()
     {
         health = Mathf.Clamp(health, 0, maxHealth);
@@ -43,19 +41,17 @@ public class PlayerHealth : MonoBehaviour
             }
 
             durationTimer += Time.deltaTime;
-            if(durationTimer > duration)
+            if (durationTimer > duration)
             {
                 float tempAlpha = overlay.color.a;
                 tempAlpha -= Time.deltaTime * fadeSpd;
                 overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, tempAlpha);
             }
         }
-   
     }
 
     public void UpdateHealthUI()
     {
-        
         float fillF = frontHp.fillAmount;
         float fillB = backHp.fillAmount;
         float hFraction = health / maxHealth;
@@ -78,7 +74,6 @@ public class PlayerHealth : MonoBehaviour
             float percentComplete = lerpTimer / chipSpeed;
             percentComplete = percentComplete * percentComplete;
             frontHp.fillAmount = Mathf.Lerp(fillF, backHp.fillAmount, percentComplete);
-
         }
     }
 
@@ -87,6 +82,9 @@ public class PlayerHealth : MonoBehaviour
         health -= damage;
         lerpTimer = 0f;
         overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 1);
+
+        // Play damage sound
+        AudioSource.PlayClipAtPoint(damageSound, transform.position, 1f);
     }
 
     public void RestoreHealth(float healAmount)

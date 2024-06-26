@@ -8,21 +8,27 @@ public class Keypad : Interactable
     private GameObject door;
     private bool doorOpen;
 
+    public AudioClip doorSound; // The sound clip to play when the door opens/closes
+
     public void Interact()
     {
         doorOpen = !doorOpen;
         door.GetComponent<Animator>().SetBool("isOpen", doorOpen);
+
+        // Play the door sound
+        if (doorSound != null)
+        {
+            AudioSource.PlayClipAtPoint(doorSound, transform.position, 1f);
+        }
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        
+
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+
     }
 }
