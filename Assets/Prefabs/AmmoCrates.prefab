@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 394b5b0c192056540adf16a874ef6af3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactionText: '[E] Open Crate'
+  interactionText: Press E to open crate
   collectAudio: {fileID: 8300000, guid: 3269a2d154970e64a94ca4122696c9bc, type: 3}
   collectibleToSpawn: {fileID: 8718695670124737908, guid: 7863ef02e998d5141b73cc41ab14a290,
     type: 3}

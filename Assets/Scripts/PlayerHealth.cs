@@ -22,9 +22,13 @@ public class PlayerHealth : MonoBehaviour
 
     private float durationTimer;
 
+    private GameManager gameManager; // Reference to GameManager
+
     void Start()
     {
-        health = maxHealth;
+        health = 100;
+        gameManager = GameManager.Instance; // Get GameManager instance
+        gameManager.SetPlayer(gameObject); // Set player reference in GameManager
         overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 0f);
     }
 
@@ -32,6 +36,7 @@ public class PlayerHealth : MonoBehaviour
     {
         health = Mathf.Clamp(health, 0, maxHealth);
         UpdateHealthUI();
+        
 
         if (overlay.color.a > 0)
         {
@@ -52,6 +57,7 @@ public class PlayerHealth : MonoBehaviour
 
     public void UpdateHealthUI()
     {
+        
         float fillF = frontHp.fillAmount;
         float fillB = backHp.fillAmount;
         float hFraction = health / maxHealth;
@@ -74,14 +80,20 @@ public class PlayerHealth : MonoBehaviour
             float percentComplete = lerpTimer / chipSpeed;
             percentComplete = percentComplete * percentComplete;
             frontHp.fillAmount = Mathf.Lerp(fillF, backHp.fillAmount, percentComplete);
+
         }
     }
-
     public void TakeDamage(float damage)
     {
         health -= damage;
         lerpTimer = 0f;
-        overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 1);
+        if (health <= 0)
+        {
+            health = 0;
+            // Notify GameManager that player health is zero
+            gameManager.PlayerHealthZero();
+        }
+        UpdateHealthUI();
 
         // Play damage sound
         AudioSource.PlayClipAtPoint(damageSound, transform.position, 1f);
@@ -91,5 +103,13 @@ public class PlayerHealth : MonoBehaviour
     {
         health += healAmount;
         lerpTimer = 0f;
+        health += healAmount;
+        if (health > maxHealth)
+        {
+            health = maxHealth;
+        }
+        UpdateHealthUI();
+
+        AudioSource.PlayClipAtPoint(damageSound, transform.position, 1f);
     }
 }

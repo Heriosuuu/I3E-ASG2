@@ -11,7 +11,7 @@ public class NewZone : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            SceneManager.LoadScene("Level 1"); // Load the specified scene
+            SceneManager.LoadScene("Level 2"); 
         }
     }
 }

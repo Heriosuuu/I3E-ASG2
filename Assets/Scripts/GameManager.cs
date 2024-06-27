@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
@@ -10,9 +8,13 @@ public class GameManager : MonoBehaviour
 
     public int ammo = 15;
     public TextMeshProUGUI scoreText;
-    public bool haveEnergy = false; // Boolean to check if the player has the energy pod
-    public GameObject inventoryEnergyPod; // Reference to the inventory UI element for the energy pod
-    public GameObject player; // Reference to the player GameObject
+    public bool haveEnergy = false;
+    public GameObject inventoryEnergyPod;
+    public GameObject gameOverPanel;
+    public GameObject gameWinPanel;
+    public GameObject timeText; // Reference to the game object containing time text
+
+    private GameObject player; // Reference to the player GameObject
 
     private void Awake()
     {
@@ -27,12 +29,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        // Make sure the player also persists across scenes
-        DontDestroyOnLoad(player);
-    }
-
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -45,10 +41,35 @@ public class GameManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // When the scene is loaded, set the player's position
-        if (SpawnManager.Instance != null)
+        // Assign references to UI elements if they are missing
+        if (scoreText == null)
         {
-            SpawnManager.Instance.SetPlayerPosition(player.transform);
+            scoreText = GameObject.FindGameObjectWithTag("ScoreText").GetComponent<TextMeshProUGUI>();
+        }
+
+        if (inventoryEnergyPod == null)
+        {
+            inventoryEnergyPod = GameObject.FindGameObjectWithTag("InventoryEnergyPod");
+        }
+
+        if (gameOverPanel == null)
+        {
+            gameOverPanel = GameObject.FindGameObjectWithTag("GameOverPanel");
+        }
+
+        if (gameWinPanel == null)
+        {
+            gameWinPanel = GameObject.FindGameObjectWithTag("GameWinPanel");
+        }
+
+        // Check if the scene loaded is "Level 2"
+        if (scene.name == "Level 2")
+        {
+            // Disable the game object containing time text
+            if (timeText != null)
+            {
+                timeText.SetActive(false);
+            }
         }
     }
 
@@ -66,12 +87,47 @@ public class GameManager : MonoBehaviour
     {
         if (inventoryEnergyPod != null)
         {
-            inventoryEnergyPod.SetActive(true); // Enable the inventory energy pod UI element
+            inventoryEnergyPod.SetActive(true);
+        }
+    }
+
+    public void GameOver()
+    {
+        Debug.Log("Game Over!");
+
+        if (gameOverPanel != null)
+        {
+            gameOverPanel.SetActive(true);
+        }
+        if (player != null)
+        {
+            Destroy(player);
         }
     }
 
     public void GameWin()
     {
         Debug.Log("Game Won!");
+
+        if (gameWinPanel != null)
+        {
+            gameWinPanel.SetActive(true);
+        }
+        if (player != null)
+        {
+            Destroy(player);
+        }
+    }
+
+    // Method called by PlayerHealth when health reaches zero
+    public void PlayerHealthZero()
+    {
+        GameOver();
+    }
+
+    // Method to set player reference (called from PlayerHealth script)
+    public void SetPlayer(GameObject playerObj)
+    {
+        player = playerObj;
     }
 }

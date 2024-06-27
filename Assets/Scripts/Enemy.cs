@@ -33,13 +33,14 @@ public class Enemy : MonoBehaviour
     [Header("Projectile")]
     public GameObject projectilePrefab;
     public float projectileSpeed = 20f;
+    public float aimHeightOffset = 2f; // New variable to control the height offset of the aim
 
     [Header("Audio")]
     public AudioClip destructionSound; // Sound played when the enemy is destroyed
 
     private void Start()
     {
-        player = GameObject.Find("PlayerObj").transform;
+        player = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
         health = maxHealth;
     }
@@ -121,8 +122,8 @@ public class Enemy : MonoBehaviour
         // Instantiate a projectile at the enemy's position
         GameObject spawnedProjectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
 
-        // Calculate direction towards the player
-        Vector3 direction = (player.position - transform.position).normalized;
+        // Calculate direction towards the player's upper body
+        Vector3 direction = (player.position + Vector3.up * aimHeightOffset - transform.position).normalized;
 
         // Get the Rigidbody component and set velocity
         Rigidbody rb = spawnedProjectile.GetComponent<Rigidbody>();

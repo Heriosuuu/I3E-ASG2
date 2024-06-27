@@ -6,44 +6,41 @@ using StarterAssets;
 
 public class Player : MonoBehaviour
 {
-
     Collectible collectible;
     Giftbox giftbox;
     Keypad keypad;
     GunPickup gunPickup;
     EnergyPickUp energyPodPickup;
     EscapePod escapePod;
+    Medkit medkit;
 
-    [SerializeField]
-    Transform playerCamera;
+    [SerializeField] Transform playerCamera;
+    [SerializeField] float interactionDistance;
+    [SerializeField] TextMeshProUGUI interactText;
+    [SerializeField] KeyCode interactKey = KeyCode.E;
+    public GameObject gun;
+    public GameObject ammo;
 
-    [SerializeField]
-    float interactionDistance;
-
-    [SerializeField]
-    TextMeshProUGUI interactText;
-
-    [SerializeField]
-    KeyCode interactKey = KeyCode.E;
-
-    public GameObject gun; // Reference to the gun GameObject on the player
-    public GameObject ammo; // Reference to the ammo GameObject on the player
-
-    private void Awake()
-    {
-        DontDestroyOnLoad(gameObject);
-    }
+    // Health variables
+    public int maxHealth = 100;
+    private int currentHealth;
 
     private void Start()
     {
+        currentHealth = maxHealth; // Initialize current health
         gun.SetActive(false);
-        ammo.SetActive(false); // Initially hide the ammo GameObject
-        GameManager.Instance.inventoryEnergyPod.SetActive(false); // Initially hide the inventory energy pod UI element
+        ammo.SetActive(false);
+        GameManager.Instance.inventoryEnergyPod.SetActive(false);
     }
 
     public void UpdateCollectible(Collectible newCollectible)
     {
         collectible = newCollectible;
+    }
+
+    public void UpdateMedkit(Medkit newMedkit)
+    {
+        medkit = newMedkit;
     }
 
     void OnInteract()
@@ -53,45 +50,45 @@ public class Player : MonoBehaviour
             collectible.Collected(this);
             collectible = null;
         }
-
-        if (giftbox != null)
+        else if (medkit != null)
+        {
+            medkit.Collected(this);
+            medkit = null;
+        }
+        else if (giftbox != null)
         {
             giftbox.Interact();
             giftbox = null;
         }
-
-        if (keypad != null)
+        else if (keypad != null)
         {
             keypad.Interact();
             keypad = null;
         }
-
-        if (gunPickup != null)
+        else if (gunPickup != null)
         {
             gunPickup.PickupGun(this);
             gunPickup = null;
         }
-
-        if (energyPodPickup != null)
+        else if (energyPodPickup != null)
         {
             energyPodPickup.PickupEnergyPod();
             energyPodPickup = null;
         }
-
-        if (escapePod != null)
+        else if (escapePod != null)
         {
             if (GameManager.Instance.haveEnergy)
             {
                 escapePod.ActivateEnergyPod();
                 GameManager.Instance.haveEnergy = false;
             }
-            else if (escapePod.energyPod.activeSelf) // Check if the energy pod is active on the escape pod
+            else if (escapePod.energyPod.activeSelf)
             {
                 GameManager.Instance.GameWin();
             }
             else
             {
-                escapePod.EnableHintText(); // Enable the hint text on the escape pod
+                escapePod.EnableHintText();
             }
         }
     }
@@ -104,8 +101,7 @@ public class Player : MonoBehaviour
         {
             if (hitInfo.transform.TryGetComponent<Collectible>(out collectible))
             {
-                // Interact text
-                interactText.text = collectible.interactionText; // Use the specific interaction text
+                interactText.text = collectible.interactionText;
                 interactText.gameObject.SetActive(true);
                 if (Input.GetKeyDown(interactKey))
                 {
@@ -114,8 +110,7 @@ public class Player : MonoBehaviour
             }
             else if (hitInfo.transform.TryGetComponent<Giftbox>(out giftbox))
             {
-                // Interact text
-                interactText.text = giftbox.interactionText; // Use the specific interaction text
+                interactText.text = giftbox.interactionText;
                 interactText.gameObject.SetActive(true);
                 if (Input.GetKeyDown(interactKey))
                 {
@@ -124,8 +119,7 @@ public class Player : MonoBehaviour
             }
             else if (hitInfo.transform.TryGetComponent<Keypad>(out keypad))
             {
-                // Interact text
-                interactText.text = keypad.interactionText; // Use the specific interaction text
+                interactText.text = keypad.interactionText;
                 interactText.gameObject.SetActive(true);
                 if (Input.GetKeyDown(interactKey))
                 {
@@ -134,8 +128,7 @@ public class Player : MonoBehaviour
             }
             else if (hitInfo.transform.TryGetComponent<GunPickup>(out gunPickup))
             {
-                // Interact text
-                interactText.text = gunPickup.interactionText; // Use the specific interaction text
+                interactText.text = gunPickup.interactionText;
                 interactText.gameObject.SetActive(true);
                 if (Input.GetKeyDown(interactKey))
                 {
@@ -144,8 +137,7 @@ public class Player : MonoBehaviour
             }
             else if (hitInfo.transform.TryGetComponent<EnergyPickUp>(out energyPodPickup))
             {
-                // Interact text
-                interactText.text = energyPodPickup.interactionText; // Use the specific interaction text
+                interactText.text = energyPodPickup.interactionText;
                 interactText.gameObject.SetActive(true);
                 if (Input.GetKeyDown(interactKey))
                 {
@@ -154,8 +146,16 @@ public class Player : MonoBehaviour
             }
             else if (hitInfo.transform.TryGetComponent<EscapePod>(out escapePod))
             {
-                // Interact text
-                interactText.text = escapePod.interactionText; // Use the specific interaction text
+                interactText.text = escapePod.interactionText;
+                interactText.gameObject.SetActive(true);
+                if (Input.GetKeyDown(interactKey))
+                {
+                    OnInteract();
+                }
+            }
+            else if (hitInfo.transform.TryGetComponent<Medkit>(out medkit))
+            {
+                interactText.text = medkit.interactionText;
                 interactText.gameObject.SetActive(true);
                 if (Input.GetKeyDown(interactKey))
                 {
@@ -170,6 +170,7 @@ public class Player : MonoBehaviour
                 gunPickup = null;
                 energyPodPickup = null;
                 escapePod = null;
+                medkit = null;
                 interactText.gameObject.SetActive(false);
             }
         }
@@ -181,6 +182,7 @@ public class Player : MonoBehaviour
             gunPickup = null;
             energyPodPickup = null;
             escapePod = null;
+            medkit = null;
             interactText.gameObject.SetActive(false);
         }
     }
@@ -188,6 +190,6 @@ public class Player : MonoBehaviour
     public void EnableGun()
     {
         gun.SetActive(true);
-        ammo.SetActive(true); // Enable the ammo GameObject
+        ammo.SetActive(true);
     }
 }
