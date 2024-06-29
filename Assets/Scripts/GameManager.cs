@@ -27,8 +27,6 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-
     }
 
     private void OnEnable()
@@ -64,14 +62,22 @@ public class GameManager : MonoBehaviour
             gameWinPanel = GameObject.FindGameObjectWithTag("GameWinPanel");
         }
 
-        // Check if the scene loaded is "Level 2"
+        if (scene.name == "MainMenu")
+        {
+            // Destroy all objects under DontDestroyOnLoad
+            Destroy(Instance.gameObject);
+            Instance = null;
+            return; // Exit the method to avoid any null reference issues
+        }
+
         if (scene.name == "Level 2")
         {
-            // Disable the game object containing time text
-            if (timeText != null)
-            {
-                timeText.SetActive(false);
-            }
+            timeText.SetActive(false);
+        }
+
+        if (scene.name == "Level 1")
+        {
+            timeText.SetActive(true);
         }
     }
 
@@ -96,34 +102,24 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         Debug.Log("Game Over!");
-
-        if (gameOverPanel != null)
-        {
-            gameOverPanel.SetActive(true);
-        }
-        if (player != null)
-        {
-            Destroy(player);
-        }
+        Time.timeScale = 0f;
+        gameOverPanel.SetActive(true);
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
 
     public void GameWin()
     {
-        Debug.Log("Game Won!");
-
-        if (gameWinPanel != null)
-        {
-            gameWinPanel.SetActive(true);
-        }
-        if (player != null)
-        {
-            Destroy(player);
-        }
+        Time.timeScale = 0f;
+        gameWinPanel.SetActive(true);
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
 
     // Method called by PlayerHealth when health reaches zero
     public void PlayerHealthZero()
     {
+        GameManager.Instance.GetComponent<PauseManager>().enabled = false;
         GameOver();
     }
 

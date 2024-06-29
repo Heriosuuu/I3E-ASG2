@@ -10,6 +10,7 @@ TagManager:
   - Blocked
   - Interact Text
   - Ammo
+  - Hint
   layers:
   - Default
   - TransparentFX

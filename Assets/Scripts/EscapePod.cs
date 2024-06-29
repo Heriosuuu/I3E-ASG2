@@ -6,10 +6,16 @@ using UnityEngine;
 public class EscapePod : Interactable
 {
     public GameObject energyPod; // Reference to the energy pod GameObject
+    public GameObject escapeZone;
 
     [SerializeField]
     TextMeshProUGUI hintText;
 
+    public void Start()
+    {
+
+        GameObject hintObject = GameObject.FindGameObjectWithTag("Hint");
+    }
     public void EnableHintText()
     {
         hintText.gameObject.SetActive(true);
@@ -25,5 +31,6 @@ public class EscapePod : Interactable
     public void ActivateEnergyPod()
     {
         energyPod.SetActive(true);
+        escapeZone.SetActive(true);
     }
 }

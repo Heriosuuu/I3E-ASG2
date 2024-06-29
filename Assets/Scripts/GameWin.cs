@@ -1,8 +1,12 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameWin : MonoBehaviour
 {
+    public Timer timer;
+    public GameObject Spawn;
+    public GameObject Player;
     /// <summary>
     /// Method to setup and display the Game Win screen
     /// </summary>
@@ -17,10 +21,13 @@ public class GameWin : MonoBehaviour
     /// </summary>
     public void RestartBtn()
     {
-        // Deactivate the win screen
+        Debug.Log("Button pressed");
+        Time.timeScale = 1f; // Ensure the game is not paused
+        SceneManager.LoadScene(1);
+        timer.remainingTime = 300;
+        Player.transform.position = Spawn.transform.position;
+        Physics.SyncTransforms();
         gameObject.SetActive(false);
-        // Loads the scene named "Level 1" to restart the game
-        SceneManager.LoadScene("Level 1");
     }
 
     /// <summary>
@@ -28,9 +35,16 @@ public class GameWin : MonoBehaviour
     /// </summary>
     public void MainMenu()
     {
+        Debug.Log("Button pressed");
         // Deactivate the win screen
         gameObject.SetActive(false);
-        // Loads the scene named "MainMenu" to go back to the main menu
+        Time.timeScale = 1f;
+
+        // Unlock and show the cursor
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        // Load the Main Menu scene
         SceneManager.LoadScene("MainMenu");
     }
 }

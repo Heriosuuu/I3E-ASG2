@@ -28,9 +28,10 @@ public class Timer : MonoBehaviour
 
     void TriggerGameOver()
     {
-        // Replace this with your game over logic
-        Debug.Log("Game Over!"); // Example: Log message
-        // Call your game over script or function here
-        GameManager.Instance.GameOver(); // Example: Assuming GameManager has a GameOver method
+        GameManager.Instance.GetComponent<PauseManager>().enabled = false;
+        
+        Debug.Log("Game Over!"); 
+        
+        GameManager.Instance.GameOver(); 
     }
 }

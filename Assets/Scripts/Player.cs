@@ -37,10 +37,6 @@ public class Player : MonoBehaviour
         gun.SetActive(false);
         ammo.SetActive(false);
 
-        // Automatically reassign interactText and ammo from Canvas to player hierarchy
-        interactText = GameObject.FindGameObjectWithTag("InteractText").GetComponent<TextMeshProUGUI>();
-        ammo = GameObject.FindGameObjectWithTag("Ammo").gameObject;
-
         GameManager.Instance.inventoryEnergyPod.SetActive(false);
         hasKeycard = false;
 

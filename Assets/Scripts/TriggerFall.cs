@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TriggerFall : MonoBehaviour
 {
     public GameObject target;  // The GameObject to be destroyed
+    public GameObject Obj;
     public AudioClip destroySound; // The sound clip to play when the target is destroyed
 
     private void OnTriggerEnter(Collider other)
@@ -12,6 +14,7 @@ public class TriggerFall : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             AudioSource.PlayClipAtPoint(destroySound, transform.position, 1f);
+            Obj.SetActive(true); 
             if (target != null)
             {
                 // First, store the position of the target

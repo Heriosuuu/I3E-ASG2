@@ -9,6 +9,10 @@ public class PauseManager : MonoBehaviour
     public GameObject optionsMenuUI; // Reference to the options menu UI GameObject
     private bool isPaused = false; // Boolean to check if the game is paused
     private bool isOptionsOpen = false; // Boolean to check if the options menu is open
+    public GameObject Spawn;
+    public GameObject Player;
+
+    public Timer timer;
 
     void Update()
     {
@@ -52,10 +56,12 @@ public class PauseManager : MonoBehaviour
 
     public void RestartBtn()
     {
-        // Loads the scene named "Level 1" to restart the game
         Time.timeScale = 1f; // Ensure the game is not paused
-        SceneManager.LoadScene("Level 1");
+        SceneManager.LoadScene(1);
         Resume(); // Ensure pause menu is turned off
+        timer.remainingTime = 300;
+        Player.transform.position = Spawn.transform.position;
+        Physics.SyncTransforms();
     }
 
     /// <summary>
@@ -64,9 +70,14 @@ public class PauseManager : MonoBehaviour
     public void MainMenu()
     {
         // Loads the scene named "MainMenu" to go back to the main menu
-        Time.timeScale = 1f; // Ensure the game is not paused
+        Time.timeScale = 1f;
+
+        // Unlock and show the cursor
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        // Load the Main Menu scene
         SceneManager.LoadScene("MainMenu");
-        Resume(); // Ensure pause menu is turned off
     }
 
     public void OpenOptionsMenu()
