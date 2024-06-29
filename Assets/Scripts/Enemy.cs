@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class Enemy : MonoBehaviour
 {
     public NavMeshAgent agent;
-    public Transform player;
+    private Transform player;
     public LayerMask whatIsGround, whatIsPlayer;
     public float health;
 
@@ -40,7 +40,7 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
-        player = GameObject.Find("Player").transform;
+        player = GameObject.FindGameObjectWithTag("Player").transform;
         agent = GetComponent<NavMeshAgent>();
         health = maxHealth;
     }
@@ -66,6 +66,9 @@ public class Enemy : MonoBehaviour
         {
             AttackPlayer();
         }
+
+        // Always face the player
+        transform.LookAt(player);
     }
 
     public void UpdateHealthUI()
@@ -81,11 +84,11 @@ public class Enemy : MonoBehaviour
         // Change color based on health status
         if (health <= 0)
         {
-            backHp.color = Color.red;
+            frontHp.color = Color.red; // Change front health bar color to red
         }
         else
         {
-            backHp.color = Color.green;
+            frontHp.color = Color.green; // Default color for healthy state
         }
     }
 

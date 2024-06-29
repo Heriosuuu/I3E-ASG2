@@ -121,5 +121,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionText: Press E to interact
-  collectAudio: {fileID: 8300000, guid: 87324c7d14d46b049b77112567c8d6b1, type: 3}
+  collectAudio: {fileID: 8300000, guid: da9996b752511f840a8b3d19eea6eec4, type: 3}
   heal: 20

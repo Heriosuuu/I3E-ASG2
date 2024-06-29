@@ -11,19 +11,13 @@ public class TriggerFall : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
+            AudioSource.PlayClipAtPoint(destroySound, transform.position, 1f);
             if (target != null)
             {
                 // First, store the position of the target
                 Vector3 targetPosition = target.transform.position;
-
-                // Destroy the target GameObject
+                // Destroy the target GameObject after the sound has been triggered
                 Destroy(target);
-
-                // Play the destroy sound at the stored position
-                if (destroySound != null)
-                {
-                    AudioSource.PlayClipAtPoint(destroySound, targetPosition, 1f);
-                }
             }
         }
     }

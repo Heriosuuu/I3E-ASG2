@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using StarterAssets;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
     Collectible collectible;
     Giftbox giftbox;
     Keypad keypad;
+    BasicKeypad basicKeypad; 
     GunPickup gunPickup;
     EnergyPickUp energyPodPickup;
     EscapePod escapePod;
     Medkit medkit;
+    Keycard keycard;
 
     [SerializeField] Transform playerCamera;
     [SerializeField] float interactionDistance;
@@ -25,12 +28,22 @@ public class Player : MonoBehaviour
     public int maxHealth = 100;
     private int currentHealth;
 
+    public bool hasKeycard; // Public field to track if the player has a keycard
+
     private void Start()
     {
-        currentHealth = maxHealth; // Initialize current health
+        // Initialize other variables and game state
+        currentHealth = maxHealth;
         gun.SetActive(false);
         ammo.SetActive(false);
+
+        // Automatically reassign interactText and ammo from Canvas to player hierarchy
+        interactText = GameObject.FindGameObjectWithTag("InteractText").GetComponent<TextMeshProUGUI>();
+        ammo = GameObject.FindGameObjectWithTag("Ammo").gameObject;
+
         GameManager.Instance.inventoryEnergyPod.SetActive(false);
+        hasKeycard = false;
+
     }
 
     public void UpdateCollectible(Collectible newCollectible)
@@ -65,6 +78,11 @@ public class Player : MonoBehaviour
             keypad.Interact();
             keypad = null;
         }
+        else if (basicKeypad != null) // Add interaction with BasicKeypad
+        {
+            basicKeypad.Interact();
+            basicKeypad = null;
+        }
         else if (gunPickup != null)
         {
             gunPickup.PickupGun(this);
@@ -90,6 +108,11 @@ public class Player : MonoBehaviour
             {
                 escapePod.EnableHintText();
             }
+        }
+        else if (keycard != null) // Add keycard interaction
+        {
+            keycard.PickupKeycard(this);
+            keycard = null;
         }
     }
 
@@ -120,6 +143,15 @@ public class Player : MonoBehaviour
             else if (hitInfo.transform.TryGetComponent<Keypad>(out keypad))
             {
                 interactText.text = keypad.interactionText;
+                interactText.gameObject.SetActive(true);
+                if (Input.GetKeyDown(interactKey))
+                {
+                    OnInteract();
+                }
+            }
+            else if (hitInfo.transform.TryGetComponent<BasicKeypad>(out basicKeypad)) // Add detection for BasicKeypad
+            {
+                interactText.text = basicKeypad.interactionText;
                 interactText.gameObject.SetActive(true);
                 if (Input.GetKeyDown(interactKey))
                 {
@@ -162,15 +194,26 @@ public class Player : MonoBehaviour
                     OnInteract();
                 }
             }
+            else if (hitInfo.transform.TryGetComponent<Keycard>(out keycard)) // Add keycard detection
+            {
+                interactText.text = keycard.interactionText;
+                interactText.gameObject.SetActive(true);
+                if (Input.GetKeyDown(interactKey))
+                {
+                    OnInteract();
+                }
+            }
             else
             {
                 collectible = null;
                 giftbox = null;
                 keypad = null;
+                basicKeypad = null; 
                 gunPickup = null;
                 energyPodPickup = null;
                 escapePod = null;
                 medkit = null;
+                keycard = null;
                 interactText.gameObject.SetActive(false);
             }
         }
@@ -179,10 +222,12 @@ public class Player : MonoBehaviour
             collectible = null;
             giftbox = null;
             keypad = null;
+            basicKeypad = null; 
             gunPickup = null;
             energyPodPickup = null;
             escapePod = null;
             medkit = null;
+            keycard = null;
             interactText.gameObject.SetActive(false);
         }
     }

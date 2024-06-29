@@ -8,6 +8,8 @@ TagManager:
   - CinemachineTarget
   - Wall
   - Blocked
+  - Interact Text
+  - Ammo
   layers:
   - Default
   - TransparentFX

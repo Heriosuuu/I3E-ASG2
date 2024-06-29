@@ -10,22 +10,32 @@ public class Keypad : Interactable
 
     public AudioClip doorSound; // The sound clip to play when the door opens/closes
 
-    public void Interact()
-    {
-        doorOpen = !doorOpen;
-        door.GetComponent<Animator>().SetBool("isOpen", doorOpen);
-
-        // Play the door sound
-        if (doorSound != null)
-        {
-            AudioSource.PlayClipAtPoint(doorSound, transform.position, 1f);
-        }
-    }
+    private Player player; // Reference to the Player script
 
     private void Start()
     {
-
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
     }
+    public void Interact()
+    {
+        if (player.hasKeycard) 
+        {
+            doorOpen = !doorOpen;
+            door.GetComponent<Animator>().SetBool("isOpen", doorOpen);
+
+            // Play the door sound
+            if (doorSound != null)
+            {
+                AudioSource.PlayClipAtPoint(doorSound, transform.position, 1f);
+            }
+        }
+        else
+        {
+            Debug.Log("You need a keycard to use this keypad.");
+        }
+    }
+
+    
 
     private void Update()
     {

@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 3428080219643900173}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Enemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -137,15 +137,14 @@ MonoBehaviour:
   backHp: {fileID: 3586655914781426874}
   duration: 2
   fadeSpd: 1.5
-  walkPoint: {x: 0, y: 0, z: 0}
-  walkPointRange: 5
-  timeBetweenAttacks: 3
-  projectile: {fileID: 3525058051116108224, guid: aa12cd5033f68fd4e8bac84e6cc95d50,
-    type: 3}
   sightRange: 20
-  attackRange: 12
-  playerInSightRange: 0
-  playerInAttackRange: 0
+  attackRange: 10
+  timeBetweenAttacks: 3
+  projectilePrefab: {fileID: 3525058051116108224, guid: aa12cd5033f68fd4e8bac84e6cc95d50,
+    type: 3}
+  projectileSpeed: 20
+  aimHeightOffset: 2
+  destructionSound: {fileID: 8300000, guid: 0ff557ed2af48374f83ecd6e6787a2b9, type: 3}
 --- !u!195 &3428080219643900173
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -179,7 +178,7 @@ GameObject:
   - component: {fileID: 490305170715693443}
   - component: {fileID: 9115665523247430320}
   - component: {fileID: 8438604974882988650}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: FrontHp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -254,7 +253,7 @@ GameObject:
   - component: {fileID: 1449379007493728156}
   - component: {fileID: 1668918215929809674}
   - component: {fileID: 1628066633552705074}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Frame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -329,7 +328,7 @@ GameObject:
   - component: {fileID: 5825091487577935067}
   - component: {fileID: 6606268102004551595}
   - component: {fileID: 3586655914781426874}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: BackHp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -404,7 +403,7 @@ GameObject:
   - component: {fileID: 220255808244227988}
   - component: {fileID: 2520404730870435056}
   - component: {fileID: 3948945299201732641}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: HPBG
   m_TagString: Untagged
   m_Icon: {fileID: 0}

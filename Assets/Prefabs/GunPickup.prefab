@@ -100,7 +100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionText: '[E] Pick Up Gun'
   gun: {fileID: 0}
-  pickupSound: {fileID: 0}
+  pickupSound: {fileID: 8300000, guid: da9996b752511f840a8b3d19eea6eec4, type: 3}
 --- !u!136 &2279134146949322431
 CapsuleCollider:
   m_ObjectHideFlags: 0
