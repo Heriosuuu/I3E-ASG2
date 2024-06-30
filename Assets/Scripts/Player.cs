@@ -1,3 +1,9 @@
+/*
+ * Author: Malcom Goh
+ * Date: 30/6/2024
+ * Description: Script controlling player interactions, health, inventory, and interactions with various game objects.
+ */
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,12 +11,16 @@ using TMPro;
 using StarterAssets;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Controls the player's interactions, health, and inventory management.
+/// </summary>
 public class Player : MonoBehaviour
 {
+    // Variables for interacting with different game objects
     Collectible collectible;
     Giftbox giftbox;
     Keypad keypad;
-    BasicKeypad basicKeypad; 
+    BasicKeypad basicKeypad;
     GunPickup gunPickup;
     EnergyPickUp energyPodPickup;
     EscapePod escapePod;
@@ -39,21 +49,32 @@ public class Player : MonoBehaviour
 
         GameManager.Instance.inventoryEnergyPod.SetActive(false);
         hasKeycard = false;
-
     }
 
+    /// <summary>
+    /// Updates the current collectible item that the player can interact with.
+    /// </summary>
+    /// <param name="newCollectible">The new collectible item to update.</param>
     public void UpdateCollectible(Collectible newCollectible)
     {
         collectible = newCollectible;
     }
 
+    /// <summary>
+    /// Updates the current medkit item that the player can interact with.
+    /// </summary>
+    /// <param name="newMedkit">The new medkit item to update.</param>
     public void UpdateMedkit(Medkit newMedkit)
     {
         medkit = newMedkit;
     }
 
+    /// <summary>
+    /// Handles the interaction when the player interacts with an object.
+    /// </summary>
     void OnInteract()
     {
+        // Check which object the player is interacting with and perform corresponding actions
         if (collectible != null)
         {
             collectible.Collected(this);
@@ -74,7 +95,7 @@ public class Player : MonoBehaviour
             keypad.Interact();
             keypad = null;
         }
-        else if (basicKeypad != null) // Add interaction with BasicKeypad
+        else if (basicKeypad != null)
         {
             basicKeypad.Interact();
             basicKeypad = null;
@@ -105,19 +126,25 @@ public class Player : MonoBehaviour
                 escapePod.EnableHintText();
             }
         }
-        else if (keycard != null) // Add keycard interaction
+        else if (keycard != null)
         {
             keycard.PickupKeycard(this);
             keycard = null;
         }
     }
 
+    /// <summary>
+    /// Updates every frame to check for interactions within the player's interaction distance.
+    /// </summary>
     public void Update()
     {
         Debug.DrawLine(transform.position, playerCamera.position + (playerCamera.forward * interactionDistance), Color.red);
         RaycastHit hitInfo;
+
+        // Raycast to detect objects within interaction distance
         if (Physics.Raycast(playerCamera.position, playerCamera.forward, out hitInfo, interactionDistance))
         {
+            // Check if the hit object has any of the interactable components and interact accordingly
             if (hitInfo.transform.TryGetComponent<Collectible>(out collectible))
             {
                 interactText.text = collectible.interactionText;
@@ -145,7 +172,7 @@ public class Player : MonoBehaviour
                     OnInteract();
                 }
             }
-            else if (hitInfo.transform.TryGetComponent<BasicKeypad>(out basicKeypad)) // Add detection for BasicKeypad
+            else if (hitInfo.transform.TryGetComponent<BasicKeypad>(out basicKeypad))
             {
                 interactText.text = basicKeypad.interactionText;
                 interactText.gameObject.SetActive(true);
@@ -190,7 +217,7 @@ public class Player : MonoBehaviour
                     OnInteract();
                 }
             }
-            else if (hitInfo.transform.TryGetComponent<Keycard>(out keycard)) // Add keycard detection
+            else if (hitInfo.transform.TryGetComponent<Keycard>(out keycard))
             {
                 interactText.text = keycard.interactionText;
                 interactText.gameObject.SetActive(true);
@@ -201,10 +228,11 @@ public class Player : MonoBehaviour
             }
             else
             {
+                // Reset interactable objects and hide interaction text if no valid interaction detected
                 collectible = null;
                 giftbox = null;
                 keypad = null;
-                basicKeypad = null; 
+                basicKeypad = null;
                 gunPickup = null;
                 energyPodPickup = null;
                 escapePod = null;
@@ -215,10 +243,11 @@ public class Player : MonoBehaviour
         }
         else
         {
+            // Reset interactable objects and hide interaction text if no valid interaction detected
             collectible = null;
             giftbox = null;
             keypad = null;
-            basicKeypad = null; 
+            basicKeypad = null;
             gunPickup = null;
             energyPodPickup = null;
             escapePod = null;
@@ -228,6 +257,9 @@ public class Player : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Enables the player's gun and ammo when the player picks up a gun.
+    /// </summary>
     public void EnableGun()
     {
         gun.SetActive(true);

@@ -1,4 +1,9 @@
-using System;
+/*
+ * Author: Malcom Goh
+ * Date: 30/6/2024
+ * Description: Manages game win functionalities such as setting up and displaying the game win screen, handling restart and main menu button actions, and managing scene transitions in Unity.
+ */
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,6 +12,7 @@ public class GameWin : MonoBehaviour
     public Timer timer;
     public GameObject Spawn;
     public GameObject Player;
+
     /// <summary>
     /// Method to setup and display the Game Win screen
     /// </summary>

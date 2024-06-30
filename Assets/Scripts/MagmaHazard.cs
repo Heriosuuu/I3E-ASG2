@@ -1,20 +1,26 @@
+/*
+ * Author: Malcom Goh
+ * Date: 30/6/2024
+ * Description: Represents a hazardous area that damages the player over time while they are inside the zone.
+ */
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class MagmaHazard : MonoBehaviour
 {
-    public float damagePerSecond = 30f;
+    public float damagePerSecond = 30f; // Amount of damage applied per second
     public float damageInterval = 1f; // Time interval for applying damage in seconds
 
-    private float timer = 0f;
-    private bool isInZone = false;
+    private float timer = 0f; // Timer to track damage intervals
+    private bool isInZone = false; // Flag to indicate if the player is inside the hazard zone
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            isInZone = true;
+            isInZone = true; // Player enters the hazard zone
         }
     }
 
@@ -22,8 +28,8 @@ public class MagmaHazard : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            isInZone = false;
-            timer = 0f; // Reset the timer when the player exits the zone
+            isInZone = false; // Player exits the hazard zone
+            timer = 0f; // Reset the damage timer
         }
     }
 
@@ -31,11 +37,11 @@ public class MagmaHazard : MonoBehaviour
     {
         if (isInZone)
         {
-            timer += Time.deltaTime;
+            timer += Time.deltaTime; // Increment timer based on real-time seconds
             if (timer >= damageInterval)
             {
-                ApplyDamage();
-                timer = 0f; // Reset the timer after applying damage
+                ApplyDamage(); // Apply damage after each damage interval
+                timer = 0f; // Reset timer for the next interval
             }
         }
     }
@@ -48,7 +54,7 @@ public class MagmaHazard : MonoBehaviour
         if (playerHealth != null)
         {
             // Apply damage to the player
-            playerHealth.TakeDamage(20f);
+            playerHealth.TakeDamage(damagePerSecond * damageInterval);
         }
     }
 }

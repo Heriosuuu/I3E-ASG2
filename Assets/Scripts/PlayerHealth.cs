@@ -1,3 +1,8 @@
+/*
+ * Author: Malcom Goh
+ * Date: 30/6/2024
+ * Description: PlayerHealth handles the player's health management, updating the health UI, taking damage, and restoring health. It includes features such as a health bar with front and back components, damage overlay effects, and sound feedback for damage taken and health restored.
+ */
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,18 +31,20 @@ public class PlayerHealth : MonoBehaviour
 
     void Start()
     {
+        // Initialize health and references
         health = 100;
-        gameManager = GameManager.Instance; // Get GameManager instance
-        gameManager.SetPlayer(gameObject); // Set player reference in GameManager
+        gameManager = GameManager.Instance;
+        gameManager.SetPlayer(gameObject);
         overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 0f);
     }
 
     void Update()
     {
+        // Updates the health UI and manages the damage overlay fading
         health = Mathf.Clamp(health, 0, maxHealth);
         UpdateHealthUI();
-        
 
+        // Fade out the damage overlay if health is above a threshold
         if (overlay.color.a > 0)
         {
             if (health < 30)
@@ -55,9 +62,11 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Updates the visual representation of the player's health on the UI.
+    /// </summary>
     public void UpdateHealthUI()
     {
-        
         float fillF = frontHp.fillAmount;
         float fillB = backHp.fillAmount;
         float hFraction = health / maxHealth;
@@ -80,9 +89,13 @@ public class PlayerHealth : MonoBehaviour
             float percentComplete = lerpTimer / chipSpeed;
             percentComplete = percentComplete * percentComplete;
             frontHp.fillAmount = Mathf.Lerp(fillF, backHp.fillAmount, percentComplete);
-
         }
     }
+
+    /// <summary>
+    /// Inflicts damage to the player's health and updates the UI and game state accordingly.
+    /// </summary>
+    /// <param name="damage">The amount of damage to inflict.</param>
     public void TakeDamage(float damage)
     {
         health -= damage;
@@ -90,20 +103,25 @@ public class PlayerHealth : MonoBehaviour
         if (health <= 0)
         {
             health = 0;
-            // Notify GameManager that player health is zero
             gameManager.PlayerHealthZero();
         }
+
+        overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 1f);
+
+        durationTimer = 0f; // Reset the duration timer
         UpdateHealthUI();
 
-        // Play damage sound
         AudioSource.PlayClipAtPoint(damageSound, transform.position, 1f);
     }
 
+    /// <summary>
+    /// Restores the player's health by the specified amount, up to the maximum health.
+    /// </summary>
+    /// <param name="healAmount">The amount of health to restore.</param>
     public void RestoreHealth(float healAmount)
     {
         health += healAmount;
         lerpTimer = 0f;
-        health += healAmount;
         if (health > maxHealth)
         {
             health = maxHealth;

@@ -1,3 +1,9 @@
+/*
+* Author: Malcom Goh
+* Date: 30/6/2024
+* Description: Controls the behavior of an enemy AI, including movement, attacking, health management, and interactions with the player.
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -71,6 +77,9 @@ public class Enemy : MonoBehaviour
         transform.LookAt(player);
     }
 
+    /// <summary>
+    /// Updates the health bar UI to reflect current health state.
+    /// </summary>
     public void UpdateHealthUI()
     {
         float hFraction = health / maxHealth;
@@ -92,16 +101,25 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Handles patrolling behavior for the enemy.
+    /// </summary>
     private void Patroling()
     {
         // Implement patrol logic here if needed
     }
 
+    /// <summary>
+    /// Makes the enemy chase the player.
+    /// </summary>
     private void ChasePlayer()
     {
         agent.SetDestination(player.position);
     }
 
+    /// <summary>
+    /// Attacks the player if in range, using projectiles.
+    /// </summary>
     private void AttackPlayer()
     {
         // Stop moving towards the player
@@ -120,6 +138,9 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Instantiates a projectile aimed at the player's upper body.
+    /// </summary>
     private void ShootProjectile()
     {
         // Instantiate a projectile at the enemy's position
@@ -136,11 +157,18 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Resets the attack cooldown.
+    /// </summary>
     private void ResetAttack()
     {
         alreadyAttacked = false;
     }
 
+    /// <summary>
+    /// Takes damage and triggers destruction if health drops to zero or below.
+    /// </summary>
+    /// <param name="damage">Amount of damage to apply.</param>
     public void TakeDamage(float damage)
     {
         health -= damage;
@@ -152,6 +180,9 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Destroys the enemy GameObject and plays destruction sound if specified.
+    /// </summary>
     public void DestroyEnemy()
     {
         // Play destruction sound if defined
@@ -164,6 +195,9 @@ public class Enemy : MonoBehaviour
         Destroy(gameObject);
     }
 
+    /// <summary>
+    /// Draws attack and sight ranges for debugging purposes when selected.
+    /// </summary>
     private void OnDrawGizmosSelected()
     {
         // Draw attack and sight ranges for debugging

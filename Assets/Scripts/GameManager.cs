@@ -1,7 +1,15 @@
+/*
+ * Author: Malcom Goh
+ * Date: 30/6/2024
+ * Description: Manages game state, player inventory, UI elements, and scene transitions.
+ */
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// GameManager handles game state, player inventory, UI elements, and scene transitions.
+/// </summary>
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
@@ -39,6 +47,11 @@ public class GameManager : MonoBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
+    /// <summary>
+    /// Handles scene setup when a new scene is loaded.
+    /// </summary>
+    /// <param name="scene">The loaded scene.</param>
+    /// <param name="mode">The load mode (single or additive).</param>
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         // Assign references to UI elements if they are missing
@@ -81,6 +94,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Adds ammunition points and updates the UI display.
+    /// </summary>
+    /// <param name="ammoCount">The amount of ammunition to add.</param>
     public void AddPoint(int ammoCount)
     {
         ammo += ammoCount;
@@ -91,6 +108,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Enables the UI display for the energy pod in the inventory.
+    /// </summary>
     public void EnableEnergyPodUI()
     {
         if (inventoryEnergyPod != null)
@@ -99,6 +119,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Handles the game over state, pausing the game and displaying the game over panel.
+    /// </summary>
     public void GameOver()
     {
         Debug.Log("Game Over!");
@@ -108,6 +131,9 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
     }
 
+    /// <summary>
+    /// Handles the game win state, pausing the game and displaying the game win panel.
+    /// </summary>
     public void GameWin()
     {
         Time.timeScale = 0f;
@@ -116,14 +142,19 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
     }
 
-    // Method called by PlayerHealth when health reaches zero
+    /// <summary>
+    /// Called by PlayerHealth when the player's health reaches zero, triggering the game over state.
+    /// </summary>
     public void PlayerHealthZero()
     {
         GameManager.Instance.GetComponent<PauseManager>().enabled = false;
         GameOver();
     }
 
-    // Method to set player reference (called from PlayerHealth script)
+    /// <summary>
+    /// Sets the player reference for interaction purposes.
+    /// </summary>
+    /// <param name="playerObj">The GameObject representing the player.</param>
     public void SetPlayer(GameObject playerObj)
     {
         player = playerObj;

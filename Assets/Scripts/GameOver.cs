@@ -1,5 +1,11 @@
-using System;
+/*
+ * Author: Malcom Goh
+ * Date: 30/6/2024
+ * Description: Manages game over functionalities such as setting up and displaying the game over screen, handling restart and main menu button actions, and managing scene transitions in Unity.
+ */
+
 using UnityEngine;
+using TMPro;
 using UnityEngine.SceneManagement;
 
 public class GameOver : MonoBehaviour
@@ -7,6 +13,7 @@ public class GameOver : MonoBehaviour
     public Timer timer;
     public GameObject Spawn;
     public GameObject Player;
+
     /// <summary>
     /// Method to setup and display the Game Over screen
     /// </summary>
@@ -28,7 +35,6 @@ public class GameOver : MonoBehaviour
         timer.remainingTime = 300;
         Player.transform.position = Spawn.transform.position;
         Physics.SyncTransforms();
-
     }
 
     /// <summary>

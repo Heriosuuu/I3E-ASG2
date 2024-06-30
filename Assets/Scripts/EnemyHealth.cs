@@ -1,3 +1,9 @@
+/*
+ * Author: Malcom Goh
+ * Date: 30/6/2024
+ * Description: Manages the health and UI representation of an enemy in a Unity game.
+ */
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,6 +40,9 @@ public class EnemyHealth : MonoBehaviour
         UpdateHealthUI();
     }
 
+    /// <summary>
+    /// Updates the health bar UI based on the current health value.
+    /// </summary>
     public void UpdateHealthUI()
     {
 
@@ -52,6 +61,10 @@ public class EnemyHealth : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Inflicts damage to the enemy's health and resets the lerping timer.
+    /// </summary>
+    /// <param name="damage">Amount of damage to inflict.</param>
     public void Damage(float damage)
     {
         health -= damage;
