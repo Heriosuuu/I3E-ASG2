@@ -7,6 +7,7 @@ public class TriggerFall : MonoBehaviour
 {
     public GameObject target;  // The GameObject to be destroyed
     public GameObject Obj;
+    public GameObject Obj2;
     public AudioClip destroySound; // The sound clip to play when the target is destroyed
 
     private void OnTriggerEnter(Collider other)
@@ -15,6 +16,7 @@ public class TriggerFall : MonoBehaviour
         {
             AudioSource.PlayClipAtPoint(destroySound, transform.position, 1f);
             Obj.SetActive(true); 
+            Obj2.SetActive(true);
             if (target != null)
             {
                 // First, store the position of the target

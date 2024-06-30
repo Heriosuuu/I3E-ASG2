@@ -7,6 +7,7 @@ public class EscapePod : Interactable
 {
     public GameObject energyPod; // Reference to the energy pod GameObject
     public GameObject escapeZone;
+    public GameObject obj2;
 
     [SerializeField]
     TextMeshProUGUI hintText;
@@ -18,6 +19,7 @@ public class EscapePod : Interactable
     }
     public void EnableHintText()
     {
+        obj2.SetActive(true);
         hintText.gameObject.SetActive(true);
         StartCoroutine(DisableHintText());
     }
