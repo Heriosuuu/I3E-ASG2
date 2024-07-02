@@ -10,6 +10,7 @@ using UnityEngine;
 
 public class EscapeZone : MonoBehaviour
 {
+    public GameObject UI;
     /// <summary>
     /// Triggered when another collider enters the trigger zone.
     /// </summary>
@@ -19,6 +20,7 @@ public class EscapeZone : MonoBehaviour
         // Check if the object entering the trigger zone is the player
         if (other.CompareTag("Player"))
         {
+            UI.gameObject.SetActive(false);
             // Disable the PauseManager to prevent pausing after winning
             GameManager.Instance.GetComponent<PauseManager>().enabled = false;
             // Call the GameWin method from the GameManager
